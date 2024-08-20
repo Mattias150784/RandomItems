@@ -31,7 +31,6 @@ public class RandomItem {
 
         MinecraftForge.EVENT_BUS.register(this);
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
         // Register event handler for the game bus
         MinecraftForge.EVENT_BUS.register(RandomItemEventHandler.class);
