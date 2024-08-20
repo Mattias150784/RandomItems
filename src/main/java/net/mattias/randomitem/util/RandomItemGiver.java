@@ -8,7 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Optional;
+import java.util.List;
 
 public class RandomItemGiver {
 
@@ -24,16 +24,18 @@ public class RandomItemGiver {
     }
 
     public static void giveRandomItem(Player player) {
-        RandomSource random = RandomSource.create();
-        Optional<Item> optionalItem = BuiltInRegistries.ITEM.getRandom(random).map(itemEntry -> itemEntry.value());
+        List<Item> items = BuiltInRegistries.ITEM.stream().toList();
 
-        if (optionalItem.isPresent()) {
-            Item randomItem = optionalItem.get();
+        if (!items.isEmpty()) {
+            RandomSource random = RandomSource.create();
+            int randomIndex = random.nextInt(items.size());
+            Item randomItem = items.get(randomIndex);
+
             ItemStack itemStack = new ItemStack(randomItem, 1);
             player.addItem(itemStack);
             LOGGER.info("Gave {} to player {}", randomItem.getDescriptionId(), player.getName().getString());
         } else {
-            LOGGER.warn("Failed to retrieve a random item.");
+            LOGGER.warn("Item registry is empty, failed to retrieve a random item.");
         }
     }
 }
